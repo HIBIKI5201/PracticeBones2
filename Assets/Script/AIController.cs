@@ -12,26 +12,36 @@ public class AIController : MonoBehaviour
     {
         // NavMeshAgentコンポーネントを取得
         agent = GetComponent<NavMeshAgent>();
+        target = GameObject.Find("Player").GetComponent<Transform>();
 
         // NavMeshAgentが2Dモードで動作するように設定
         agent.updateRotation = false;
         agent.updateUpAxis = false;
+    }
 
-        // 目標地点を設定
-        if (target != null)
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.CompareTag("Enemy"))
         {
-            SetDestination(target.position);
+            Destroy(gameObject);
         }
     }
 
     void Update()
     {
-        // タップした場所に移動
+        //targetまで移動
+        if (target != null)
+        {
+            SetDestination(target.position);
+        }
+
+        /* タップした場所に移動
         if (Input.GetMouseButtonDown(0))
         {
             Vector2 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             SetDestination(worldPosition);
         }
+        */
     }
 
     // 目標地点を設定するメソッド

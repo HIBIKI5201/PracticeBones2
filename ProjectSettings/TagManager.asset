@@ -3,15 +3,17 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Enemy
+  - EnemySpawnArea
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - EnemySpawnArea
   - Water
   - UI
-  - 
+  - Enemy
   - 
   - 
   - 
@@ -40,4 +42,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Ground
+    uniqueID: 1500422429
+    locked: 0
+  - name: Charactor
+    uniqueID: 3628695637
     locked: 0
