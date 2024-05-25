@@ -1,25 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class PlayerController : MonoBehaviour
 {
-    public static int _playerHealth;
-    [SerializeField] float _moveSpeed;
+    [Header("プレイヤーのコンポーネント")]
+    [SerializeField] private Rigidbody2D playerRB;
 
+    [Header("プレイヤーのステータス")]
+    [Tooltip("プレイヤーの体力")]
+    [SerializeField] private float _playerHealth;
+    public static float Health;
+    [Tooltip("プレイヤーの移動スピード")]
+    [SerializeField] private float _moveSpeed;
+
+    [Header("範囲外設定")]
+    [Tooltip("通行止めタイルのTileMap")]
     public Tilemap tilemap;
     private bool _fieldOut;
     void Start()
     {
-        
+        Health = _playerHealth;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            _playerHealth--;
+            Health--;
+            Debug.Log("プレイヤーがダメージを受けた \n 残り体力：" + Health);
         }
     }
 
@@ -36,7 +47,8 @@ public class PlayerController : MonoBehaviour
             if (tile.name == "EnemySpawn") // タイルの名前で判定
             {
                 _fieldOut = true;
-            } else
+            }
+            else
             {
                 _fieldOut = false;
             }
@@ -45,12 +57,16 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal") * _moveSpeed * Time.deltaTime;
-        float vertical = Input.GetAxisRaw("Vertical") * _moveSpeed * Time.deltaTime;
-        transform.position = new Vector2(horizontal + transform.position.x, vertical + transform.position.y);
+        float horizontal = Input.GetAxisRaw("Horizontal") * _moveSpeed;
+        float vertical = Input.GetAxisRaw("Vertical") * _moveSpeed;
+        playerRB.velocity = new Vector2(horizontal, vertical);
         if(_fieldOut)
         {
-            transform.position = new Vector2(-horizontal + transform.position.x, -vertical + transform.position.y);
+            playerRB.velocity = new Vector2(-horizontal, -vertical);
+        }
+        if(horizontal == 0 && vertical == 0)
+        {
+            playerRB.velocity = Vector2.zero;
         }
     }
 }
