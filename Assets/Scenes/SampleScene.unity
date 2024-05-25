@@ -567,7 +567,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnemyPrefab: {fileID: 8221459136153928003, guid: 47b2bc4818e4a1d42a3252ca176d8056, type: 3}
-  _interval: 1
+  _interval: 5
   spawnFieldCentorPoint: {x: 0, y: 0}
   spawnField: {x: 20, y: 12}
   spawnArea: 0
