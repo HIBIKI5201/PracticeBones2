@@ -3928,7 +3928,7 @@ GameObject:
   - component: {fileID: 1287564107}
   - component: {fileID: 1287564106}
   - component: {fileID: 1287564105}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tilemap2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5155,6 +5155,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21a73ac3616c73943a363f14e1bbad08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerRB: {fileID: 1643466637}
+  _playerHealth: 10
   _moveSpeed: 5
   tilemap: {fileID: 1255561666}
 --- !u!50 &1643466637
@@ -5182,7 +5184,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!58 &1643466638
 CircleCollider2D:

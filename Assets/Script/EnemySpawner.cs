@@ -34,7 +34,7 @@ public class EnemySpawner : MonoBehaviour
 
     void Start()
     {
-        InvokeRepeating("EnemySpawn", 0, _interval);
+        InvokeRepeating("EnemySpawn", 1, _interval);
     }
 
     private void EnemySpawn()
@@ -69,7 +69,7 @@ public class EnemySpawner : MonoBehaviour
             spawnPoint.x = spawnField.x / 2 * -1;
         }
 
-        GameObject enemy = Instantiate(EnemyPrefab, spawnPoint, Quaternion.identity);
+        GameObject enemy = Instantiate(EnemyPrefab, spawnPoint, Quaternion.Euler(Vector3.zero));
         enemy.GetComponent<NavMeshAgent>().speed = _enemySpeed;
     }
 
