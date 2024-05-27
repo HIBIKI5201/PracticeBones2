@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
     [Header("プレイヤーのコンポーネント")]
     [SerializeField] private Rigidbody2D playerRB;
+
+    [Header("UI設定")]
+    [SerializeField] private Image HealthBar;
 
     [Header("プレイヤーのステータス")]
     [Tooltip("プレイヤーの体力")]
@@ -30,6 +34,7 @@ public class PlayerController : MonoBehaviour
         {
             Health--;
             Debug.Log("プレイヤーがダメージを受けた \n 残り体力：" + Health);
+            HealthBar.fillAmount = Health / _playerHealth;
         }
     }
 
