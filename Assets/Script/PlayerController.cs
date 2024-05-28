@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using DG.Tweening;
+using Unity.VisualScripting;
 
 public class PlayerController : MonoBehaviour
 {
@@ -25,6 +26,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _moveSpeed;
     [Header("Voidモードのステータス")]
     [SerializeField] private float _voidTime;
+    [SerializeField] private float _voidCoolTime;
+    private float voidCoolTimer = 1;
     [SerializeField] private float _voidMoveSpeed;
 
     [Header("プレイヤーの状態")]
@@ -46,20 +49,6 @@ public class PlayerController : MonoBehaviour
         Health = _playerHealth;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            if (_playerStatus != PlayerStatus.Void)
-            {
-                Health--;
-                Debug.Log($"プレイヤーがダメージを受けた \n 残り体力：{Health}");
-                HealthBar.fillAmount = Health / _playerHealth;
-            }
-
-        }
-    }
-
     void OnTriggerStay2D(Collider2D collision)
     {
         Vector3 hitPosition = collision.ClosestPoint(transform.position);
@@ -79,6 +68,30 @@ public class PlayerController : MonoBehaviour
                 _fieldOut = false;
             }
         }
+
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Debug.Log("Enemyとの接触を感知");
+            if (_playerStatus != PlayerStatus.Void)
+            {
+                Health--;
+                Debug.Log($"プレイヤーがダメージを受けた\n残り体力：{Health}");
+                HealthBar.fillAmount = Health / _playerHealth;
+
+                Destroy(collision.gameObject);
+            }
+        }
+
+        if (collision.gameObject.CompareTag("Star"))
+        {
+            Debug.Log("Starとの接触を感知");
+
+            if (_playerStatus != PlayerStatus.Void)
+            {
+                Destroy(collision.gameObject);
+                StarSpawner.StarCount--;
+            }
+        }
     }
 
     private IEnumerator VoidMode()
@@ -96,9 +109,30 @@ public class PlayerController : MonoBehaviour
         Debug.Log("EndVoidMode");
 
         _playerStatus = PlayerStatus.Normal;
+
         playerRenderer.color = new Color(playerRenderer.color.r, playerRenderer.color.g, playerRenderer.color.b, 1f);
         HealthBar.color = new Color(HealthBar.color.r, HealthBar.color.g, HealthBar.color.b, 1f);
         StaminaBar.color = new Color(StaminaBar.color.r, StaminaBar.color.g, StaminaBar.color.b, 1f);
+
+        voidCoolTimer = 0;
+
+        DOTween.To(() => voidCoolTimer, x => voidCoolTimer = x, 1, _voidCoolTime)
+                .OnUpdate(() =>
+                {
+                    StaminaBar.fillAmount = voidCoolTimer;
+                    StaminaBar.color = Color.yellow;
+                })
+                .OnComplete(() =>
+                {
+                    StaminaBar.color = Color.white;
+                    Debug.Log("クールタイム終了");
+                });
+
+        // DOTweenが完了するのを待つ
+        while (voidCoolTimer < 1)
+        {
+            yield return null;
+        }
     }
 
     void Update()
@@ -131,7 +165,7 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        if(Input.GetKeyDown(KeyCode.V))
+        if(Input.GetKeyDown(KeyCode.V) && voidCoolTimer == 1)
         {
             StartCoroutine(VoidMode());
         }

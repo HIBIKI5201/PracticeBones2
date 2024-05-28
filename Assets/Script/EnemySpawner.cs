@@ -11,6 +11,9 @@ public class EnemySpawner : MonoBehaviour
     [Header("スポーンパラメーター")]
     [Tooltip("敵がスポーンする間隔。値が小さいほど早くスポーンする。")]
     [SerializeField] private float _interval;
+    [SerializeField] private float _degreeInterval;
+    private float Timer;
+    private float DegreeInterval = 1;
     [Tooltip("敵がスポーンする範囲の中心点。")]
     [SerializeField] private Vector2 spawnFieldCentorPoint;
     [Tooltip("敵がスポーンする外周の範囲。横幅と縦幅を指定する。")]
@@ -34,7 +37,7 @@ public class EnemySpawner : MonoBehaviour
 
     void Start()
     {
-        InvokeRepeating("EnemySpawn", 1, _interval);
+
     }
 
     private void EnemySpawn()
@@ -75,6 +78,12 @@ public class EnemySpawner : MonoBehaviour
 
     void Update()
     {
-        
+        Timer += Time.deltaTime;
+        if (_interval / (DegreeInterval) < Timer)
+        {
+            EnemySpawn();
+            Timer = 0;
+            DegreeInterval += _degreeInterval;
+        }
     }
 }
