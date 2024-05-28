@@ -30,13 +30,20 @@ public class AIController : MonoBehaviour
 
     void Update()
     {
-        //target‚Ü‚ÅˆÚ“®
-        if (target != null)
+        if(!ReStartManager.gameOver)
         {
-            SetDestination(target.position);
+        //target‚Ü‚ÅˆÚ“®
+            if (target != null)
+            {
+                SetDestination(target.position);
+            }
+
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }else
+        {
+            SetDestination(transform.position);
         }
 
-        transform.rotation = Quaternion.Euler(0, 0, 0);
 
         /* ƒ^ƒbƒv‚µ‚½êŠ‚ÉˆÚ“®
         if (Input.GetMouseButtonDown(0))

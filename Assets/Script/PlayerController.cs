@@ -43,6 +43,8 @@ public class PlayerController : MonoBehaviour
     public Tilemap tilemap;
     private bool _fieldOut;
 
+    public static int Score;
+
 
     void Start()
     {
@@ -75,10 +77,16 @@ public class PlayerController : MonoBehaviour
             if (_playerStatus != PlayerStatus.Void)
             {
                 Health--;
+
                 Debug.Log($"プレイヤーがダメージを受けた\n残り体力：{Health}");
                 HealthBar.fillAmount = Health / _playerHealth;
 
                 Destroy(collision.gameObject);
+
+                if (Health <= 0)
+                {
+                    GameObject.Find("GameManager").GetComponent<ReStartManager>().GameOver();
+                }
             }
         }
 
@@ -88,8 +96,12 @@ public class PlayerController : MonoBehaviour
 
             if (_playerStatus != PlayerStatus.Void)
             {
-                Destroy(collision.gameObject);
+                Score++;
                 StarSpawner.StarCount--;
+
+                Debug.Log($"現在のスコアは{Score}");
+
+                Destroy(collision.gameObject);
             }
         }
     }
@@ -137,37 +149,43 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
-
-        if (horizontal != 0 || vertical != 0)
+        if(!ReStartManager.gameOver)
         {
-            Vector2 moveAxis = Vector2.zero;
+            float horizontal = Input.GetAxisRaw("Horizontal");
+            float vertical = Input.GetAxisRaw("Vertical");
 
-            if (_playerStatus == PlayerStatus.Normal)
+            if (horizontal != 0 || vertical != 0)
             {
-                moveAxis = new Vector2(horizontal * _moveSpeed, vertical * _moveSpeed);
+                Vector2 moveAxis = Vector2.zero;
+
+                if (_playerStatus == PlayerStatus.Normal)
+                {
+                    moveAxis = new Vector2(horizontal * _moveSpeed, vertical * _moveSpeed);
+                }
+                else if(_playerStatus == PlayerStatus.Void)
+                {
+                    moveAxis = new Vector2(horizontal * _voidMoveSpeed, vertical * _voidMoveSpeed);
+                }
+
+                playerRB.velocity = moveAxis;
+                if(_fieldOut)
+                {
+                    playerRB.velocity = new Vector2(-moveAxis.x, -moveAxis.y);
+                }
             }
-            else if(_playerStatus == PlayerStatus.Void)
+            else
             {
-                moveAxis = new Vector2(horizontal * _voidMoveSpeed, vertical * _voidMoveSpeed);
+                playerRB.velocity = Vector2.zero;
             }
 
-            playerRB.velocity = moveAxis;
-            if(_fieldOut)
+
+            if(Input.GetKeyDown(KeyCode.V) && voidCoolTimer == 1)
             {
-                playerRB.velocity = new Vector2(-moveAxis.x, -moveAxis.y);
+                StartCoroutine(VoidMode());
             }
-        }
-        else
+        } else
         {
-            playerRB.velocity = Vector2.zero;
-        }
-
-
-        if(Input.GetKeyDown(KeyCode.V) && voidCoolTimer == 1)
-        {
-            StartCoroutine(VoidMode());
+            playerRB.velocity = new Vector2 (0, 0);
         }
     }
 }
