@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 public class AIController : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class AIController : MonoBehaviour
         agent.updateUpAxis = false;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.gameObject.CompareTag("Enemy"))
         {
@@ -34,6 +35,8 @@ public class AIController : MonoBehaviour
         {
             SetDestination(target.position);
         }
+
+        transform.rotation = Quaternion.Euler(0, 0, 0);
 
         /* É^ÉbÉvÇµÇΩèÍèäÇ…à⁄ìÆ
         if (Input.GetMouseButtonDown(0))
