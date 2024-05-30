@@ -185,3 +185,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  DestroyParticle: {fileID: 1337198075554910, guid: ae5390655113b284b9c23bcc4bddde3a, type: 3}

@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
+using static PlayerController;
 
 public class AIController : MonoBehaviour
 {
     private NavMeshAgent agent;
     public Transform target;
+
+    [SerializeField] private GameObject DestroyParticle;
+    PlayerController controller;
 
     void Start()
     {
@@ -24,7 +28,17 @@ public class AIController : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Enemy"))
         {
+            Instantiate(DestroyParticle, transform.position, Quaternion.identity);
             Destroy(gameObject);
+        }
+
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            controller = collision.GetComponent<PlayerController>();
+            if (controller._playerStatus == PlayerStatus.Normal)
+            {
+                Instantiate(DestroyParticle, transform.position, Quaternion.identity);
+            }
         }
     }
 

@@ -55,21 +55,20 @@ public class EnemySpawner : MonoBehaviour
             spawnPoint.y = Random.Range(spawnFieldCentorPoint.y - spawnField.y / 2, spawnFieldCentorPoint.y + spawnField.y / 2);
         }
 
-        if (spawnArea == SpawnArea.up)
+        switch (spawnArea)
         {
-            spawnPoint.y = spawnField.y / 2;
-        }
-        else if (spawnArea == SpawnArea.down)
-        {
-            spawnPoint.y = spawnField.y / 2 * -1;
-        }
-        else if (spawnArea == SpawnArea.right)
-        {
-            spawnPoint.x = spawnField.x / 2;
-        }
-        else if (spawnArea == SpawnArea.left)
-        {
-            spawnPoint.x = spawnField.x / 2 * -1;
+            case SpawnArea.up:
+                spawnPoint.y = spawnField.y / 2;
+                break;
+            case SpawnArea.down:
+                spawnPoint.y = spawnField.y / 2;
+                break;
+            case SpawnArea.right:
+                spawnPoint.x = spawnField.x / 2;
+                break;
+            case SpawnArea.left:
+                spawnPoint.x = spawnField.x / 2 * -1;
+                break;
         }
 
         GameObject enemy = Instantiate(EnemyPrefab, spawnPoint, Quaternion.Euler(Vector3.zero));

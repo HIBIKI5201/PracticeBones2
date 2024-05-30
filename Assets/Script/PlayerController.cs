@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     [Header("UI設定")]
     [SerializeField] private Image HealthBar;
     [SerializeField] private Image StaminaBar;
+    [SerializeField] private TextMeshProUGUI ScoreText;
 
     [Header("プレイヤーのステータス")]
     [Tooltip("プレイヤーの体力")]
@@ -27,7 +28,7 @@ public class PlayerController : MonoBehaviour
     [Header("Voidモードのステータス")]
     [SerializeField] private float _voidTime;
     [SerializeField] private float _voidCoolTime;
-    private float voidCoolTimer = 1;
+    public float voidCoolTimer = 1;
     [SerializeField] private float _voidMoveSpeed;
 
     [Header("プレイヤーの状態")]
@@ -81,12 +82,12 @@ public class PlayerController : MonoBehaviour
                 Debug.Log($"プレイヤーがダメージを受けた\n残り体力：{Health}");
                 HealthBar.fillAmount = Health / _playerHealth;
 
-                Destroy(collision.gameObject);
-
                 if (Health <= 0)
                 {
                     GameObject.Find("GameManager").GetComponent<ReStartManager>().GameOver();
                 }
+
+                Destroy(collision.gameObject);
             }
         }
 
@@ -100,6 +101,7 @@ public class PlayerController : MonoBehaviour
                 StarSpawner.StarCount--;
 
                 Debug.Log($"現在のスコアは{Score}");
+                ScoreText.text = $"Score : {Score}";
 
                 Destroy(collision.gameObject);
             }

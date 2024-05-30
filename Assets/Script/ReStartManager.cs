@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ReStartManager : MonoBehaviour
 {
@@ -16,6 +17,19 @@ public class ReStartManager : MonoBehaviour
     {
         GameOverCanvas.enabled = true;
         gameOver = true;
+    }
+
+    public void ReStartButtonClick()
+    {
+        Debug.Log("ReStartButtonClick");
+
+        PlayerController.Health = 0;
+        PlayerController.Score = 0;
+        StarSpawner.StarCount = 0;
+
+        Debug.Log($"health : {PlayerController.Health}\nScore : {PlayerController.Score}\nStarCount : {StarSpawner.StarCount}");
+
+        SceneManager.LoadScene("SampleScene");
     }
 
     void Update()
